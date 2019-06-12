@@ -4,22 +4,22 @@
 				<el-page-header @back="goback" content="详情页面"></el-page-header>
 		</el-row>
 		<br>
-		<el-card class="box-card">
+		<el-card >
 			<div slot="header" class="clearfix">
 			<span><b>CPU</b></span>
 				<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
 			</div>
-			<div id="t1" style="height: 300px">
+			<div id="t1" style="height: 300px;width: 100%">
 					fsdfsafasfas
 			</div>
 		</el-card>
 		<br>
-		<el-card class="box-card">
+		<el-card>
 			<div slot="header" class="clearfix">
 			<span><b>内存</b></span>
 				<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
 			</div>
-			<div id="t1" style="height: 300px">
+			<div id="t1" style="height: 300px;width: 100%">
 					fsdfsafasfas
 			</div>
 		</el-card>
@@ -60,5 +60,5 @@ export default {
 }
 </script>
 <style>
-
+.el-page-header__content{font-size:14px !important;}
 </style>

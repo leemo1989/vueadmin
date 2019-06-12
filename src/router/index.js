@@ -6,10 +6,15 @@ import tform from '@/components/form'
 import yewu from '@/components/yewu'
 import mot from '@/components/mot'
 import vdetail from '@/components/vdetail'
+import login from '@/components/login'
 Vue.use(Router)
 
 export default new Router({
   routes: [
+      {
+          path:'/login',
+          component: login,
+      },
       {
         path: '/',
         name: 'Home',
@@ -27,6 +32,7 @@ export default new Router({
             {path:'/vdetail',component:vdetail},
         ]
       },
+
 
   ]
 })

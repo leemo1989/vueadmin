@@ -45,7 +45,7 @@
                     </el-breadcrumb>
                 </el-col>
                 <el-col :span="2" :offset="19">
-                    <el-dropdown split-button trigger="click" size="mini">
+                    <el-dropdown split-button trigger="click" size="mini" @command="handleCommand">
                         王磊
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>登出</el-dropdown-item>
@@ -64,7 +64,12 @@ export default {
     data(){
         return {
         }
-
+    },
+    methods:{
+        handleCommand(){
+            console.log(2222)
+            this.$router.push('/login')
+        }
     }
 }
 </script>
