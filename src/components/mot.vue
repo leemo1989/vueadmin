@@ -1,7 +1,7 @@
 <template>
     <div>
 		<el-row style="margin-bottom: 10px">
-			<el-card>
+			<el-card shadow="never">
 				<div slot="header">
 					<span><b>信息汇总</b></span>
 					<el-button icon="el-icon-setting" style="float: right; padding: 3px 0" type="text">设置</el-button>

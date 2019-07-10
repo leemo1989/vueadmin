@@ -7,6 +7,8 @@ import yewu from '@/components/yewu'
 import mot from '@/components/mot'
 import vdetail from '@/components/vdetail'
 import login from '@/components/login'
+import dashboard from '@/components/dashboard'
+import message from '@/components/message'
 Vue.use(Router)
 
 export default new Router({
@@ -16,12 +18,18 @@ export default new Router({
           component: login,
       },
       {
+          path:'/',
+          redirect:'/dashboard',
+      },
+      {
         path: '/',
         name: 'Home',
         component: Home,
         children:[
+            {path:'/dashboard',component:dashboard},
             {path:'/table',component:ttable},
             {path:'/form',component:tform},
+            {path:'/message',component:message},
             {
                 path:'/yewu',
                 component:yewu,

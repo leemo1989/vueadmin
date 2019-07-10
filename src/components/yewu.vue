@@ -1,5 +1,5 @@
 <template>
-    <div class="bd">
+    <el-row type="flex" class="bd">
 		<div class="treeinfo">
 			<el-tree
 				:data="data"
@@ -10,7 +10,7 @@
 		<div class="tinfo">
 			<router-view></router-view>
 		</div>
-    </div>
+    </el-row>
 </template>
 
 <script>
@@ -48,12 +48,12 @@ export default {
 </script>
 <style>
 .bd{
-	display: flex;
+	background: white;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border:1px solid #EBEEF5;border-radius:4px;overflow:hidden
 }
 .treeinfo{
-	flex:1 1 180px;
+	flex:0 1 180px;
 	min-height: 500px;
-	border-right:1px solid rgb(208, 213, 215)
+	//border-right:1px solid rgb(208, 213, 215)
 }
 .tinfo{
 	flex:1 1 auto;

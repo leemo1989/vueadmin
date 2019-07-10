@@ -1,20 +1,26 @@
 <template>
     <el-row type="flex" style="height: 100%">
-        <el-aside width="200px">
-            <div style="height: 50px;overflow: hidden;text-align: center;color:white;background: #409EFF;">
-                 <h1>YH监控平台</h1>
+        <el-aside :style="showside">
+            <div style="overflow: hidden;height: 50px;color:white;background: #409EFF;">
+                <div v-if="t" style="height:50px;display: flex;align-items: center;justify-content: center">
+                    <img src="../assets/yhosa.png">
+                </div>
+                <div style="margin-left: 18px;height:50px;display: flex;align-items: center" v-else>
+                    <img src="../assets/yhosa.png" style="margin-right:10px;"><h2>YH监控平台</h2>
+                </div>
             </div>
 
-            <el-menu :router="true">
+            <el-menu :router="true" :collapse="t" :collapse-transition="false">
+                <el-menu-item index="/dashboard">
+                    <i class="el-icon-upload"></i>
+                    <span>总览</span>
+                </el-menu-item>
                 <el-submenu index="2">
                     <template slot="title">
                         <i class="el-icon-location"></i>
-                        <span>主页</span>
+                        <span>采集器部署</span>
                     </template>
-
                     <el-menu-item-group>
-                        <template slot="title">常用插件</template>
-                        <el-menu-item index="/table">table</el-menu-item>
                         <el-menu-item index="/form">form</el-menu-item>
                         <el-menu-item index="/yewu">业务拓扑</el-menu-item>
                     </el-menu-item-group>
@@ -22,12 +28,28 @@
                 <el-menu-item index="2">
                     <i class="el-icon-upload"></i>
                     <span>监控模板</span>
-                </el-menu-item index="2">
-                <el-menu-item>
+                </el-menu-item>
+                <el-menu-item index="2">
+                    <i class="el-icon-upload"></i>
+                    <span>中间件监控</span>
+                </el-menu-item>
+                <el-menu-item index="2">
+                    <i class="el-icon-upload"></i>
+                    <span>智能分析</span>
+                </el-menu-item>
+                <el-menu-item index="2">
+                    <i class="el-icon-upload"></i>
+                    <span>中间件监控</span>
+                </el-menu-item>
+                <el-menu-item index="3">
                     <i class="el-icon-phone"></i>
                     <span>告警模板</span>
                 </el-menu-item>
                 <el-menu-item index="2">
+                    <i class="el-icon-upload"></i>
+                    <span>故障自愈</span>
+                </el-menu-item>
+                <el-menu-item index="4">
                     <i class="el-icon-setting"></i>
                     <span>系统设置</span>
                 </el-menu-item>
@@ -36,7 +58,7 @@
         <el-container style="height: 100%">
             <el-header>
                 <el-col :span="1">
-                    <i class="el-icon-menu" size="mini"></i>
+                    <el-button icon="el-icon-menu" size="mini" @click="toggleshow" style="border: none"></el-button>
                 </el-col>
                 <el-col :span="2">
                     <el-breadcrumb>
@@ -44,16 +66,20 @@
                         <el-breadcrumb-item>活动管理</el-breadcrumb-item>
                     </el-breadcrumb>
                 </el-col>
-                <el-col :span="2" :offset="19">
-                    <el-dropdown split-button trigger="click" size="mini" @command="handleCommand">
-                        王磊
+                <el-col :span="3" :offset="18">
+                    <el-badge :value="unreadnum" v-show="unreadnum >0">
+                        <el-button icon="fa fa-envelope-o fa-2x" size="small" style="border: none" @click="catmessage"></el-button>
+                    </el-badge>
+                    <el-divider direction="vertical"></el-divider>
+                    <el-dropdown trigger="click" size="mini" @command="handleCommand">
+                        <span><el-button circle icon="el-icon-user"></el-button> 王磊<i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>登出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-col>
             </el-header>
-            <el-main style="height: 100%;">
+            <el-main>
                 <router-view></router-view>
             </el-main>
         </el-container>
@@ -63,17 +89,46 @@
 export default {
     data(){
         return {
+            showside:'width:18rem',
+            t:false,
+        }
+    },
+    computed:{
+        unreadnum:function(v){
+            return this.$store.state.unread.length
         }
     },
     methods:{
+        catmessage(){
+            this.$router.push('/message')
+        },
         handleCommand(){
-            console.log(2222)
             this.$router.push('/login')
+        },
+        toggleshow(){
+            console.log(1111)
+            this.t = !this.t
+            if(this.t){
+                console.log(2)
+                this.showside='width:5.5rem'
+            }else{
+                console.log(3)
+                this.showside='width:18rem'
+            }
+
         }
     }
 }
 </script>
 <style type="text/css">
+    .el-badge__content.is-fixed{
+        top:10px !important;
+        right:20px !important;
+    }
+    .el-main{
+         height: 100%;
+        background:rgba(248, 249, 252);
+    }
     .el-container{
         height: 50px;
     }
@@ -82,16 +137,15 @@ export default {
         !important;
     }
     .el-header{
+        //background: #409EFF;
+        //color:white;
         height: 50px !important;
         line-height: 50px;
-        //box-shadow:1px 1px 5px #333333;
-        background: #409EFF;
-        color:#fff;
+        margin-bottom: 5px;
+        box-shadow:0 .15rem 1.75rem 0 rgba(58,59,69,.15);
     }
     .el-aside{
-        //background: #409EFF;
         height: 100%;
-        //border-right:solid 1px #e6e6e6
     }
     .el-menu-item{
         font-size:12px !important;
