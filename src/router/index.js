@@ -9,6 +9,7 @@ import vdetail from '@/components/vdetail'
 import login from '@/components/login'
 import dashboard from '@/components/dashboard'
 import message from '@/components/message'
+import unitwork from '@/components/unitwork'
 Vue.use(Router)
 
 export default new Router({
@@ -37,6 +38,7 @@ export default new Router({
                     {path:'/mot',component:mot},
                 ]
             },
+            {path:'/unitwork',component:unitwork},
             {path:'/vdetail',component:vdetail},
         ]
       },

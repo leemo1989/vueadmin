@@ -2,7 +2,7 @@
     <div class="login">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>欢迎登录</span>
+            <span><b>欢迎登录</b></span>
           </div>
           <div>
               <el-input placeholder="请输入用户名" v-model="username" size="medium">
@@ -36,6 +36,9 @@ export default {
 }
 </script>
 <style>
+    .el-input-group__append, .el-input-group__prepend{
+        padding: 0 15px !important;
+    }
 .box-card{
     position: absolute;
     right:160px;

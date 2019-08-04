@@ -19,7 +19,7 @@ html,body{
   font-size:12px;
   line-height: 1.5;
   color:#515a6e;
-  font-family: "Microsoft YaHei";
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   height: 100%;
 }
 #app{

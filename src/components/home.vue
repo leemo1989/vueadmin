@@ -1,7 +1,7 @@
 <template>
     <el-row type="flex" style="height: 100%">
         <el-aside :style="showside">
-            <div style="overflow: hidden;height: 50px;color:white;background: #409EFF;">
+            <div style="overflow: hidden;height: 50px;color:white;border-bottom:1px solid #101117">
                 <div v-if="t" style="height:50px;display: flex;align-items: center;justify-content: center">
                     <img src="../assets/yhosa.png">
                 </div>
@@ -10,7 +10,10 @@
                 </div>
             </div>
 
-            <el-menu :router="true" :collapse="t" :collapse-transition="false">
+            <el-menu :router="true" :collapse="t" :collapse-transition="false"
+                background-color="#191a23"
+                     text-color="#fff"
+            >
                 <el-menu-item index="/dashboard">
                     <i class="el-icon-upload"></i>
                     <span>总览</span>
@@ -23,6 +26,17 @@
                     <el-menu-item-group>
                         <el-menu-item index="/form">form</el-menu-item>
                         <el-menu-item index="/yewu">业务拓扑</el-menu-item>
+                    </el-menu-item-group>
+                </el-submenu>
+                <el-submenu index="3">
+                    <template slot="title">
+                        <i class="el-icon-s-order"></i>
+                        <span>作业系统</span>
+                    </template>
+                    <el-menu-item-group>
+                        <el-menu-item index="/unitwork">一次性作业</el-menu-item>
+                        <el-menu-item index="/yewu">编辑作业</el-menu-item>
+                        <el-menu-item index="/yewu">查看作业</el-menu-item>
                     </el-menu-item-group>
                 </el-submenu>
                 <el-menu-item index="2">
@@ -89,12 +103,12 @@
 export default {
     data(){
         return {
-            showside:'width:18rem',
+            showside:'width:256px',
             t:false,
         }
     },
     computed:{
-        unreadnum:function(v){
+        unreadnum:function(){
             return this.$store.state.unread.length
         }
     },
@@ -106,13 +120,10 @@ export default {
             this.$router.push('/login')
         },
         toggleshow(){
-            console.log(1111)
             this.t = !this.t
             if(this.t){
-                console.log(2)
                 this.showside='width:5.5rem'
             }else{
-                console.log(3)
                 this.showside='width:18rem'
             }
 
@@ -126,7 +137,7 @@ export default {
         right:20px !important;
     }
     .el-main{
-         height: 100%;
+        height: 100%;
         background:rgba(248, 249, 252);
     }
     .el-container{
@@ -137,17 +148,26 @@ export default {
         !important;
     }
     .el-header{
-        //background: #409EFF;
-        //color:white;
         height: 50px !important;
         line-height: 50px;
         margin-bottom: 5px;
         box-shadow:0 .15rem 1.75rem 0 rgba(58,59,69,.15);
     }
     .el-aside{
-        height: 100%;
+        height: 100vh;
+        background:#191a23;
+        box-shadow:2px 0 6px rgba(0,21,41,.35);
+        //z-index: 3;
+
     }
     .el-menu-item{
         font-size:12px !important;
+    }
+    .el-menu{
+        border: none !important;
+    }
+    .el-menu-item.is-active{
+        background:#2d8cf0!important;
+        color: #ffffff !important;
     }
 </style>
