@@ -65,6 +65,15 @@
         <el-row style="margin-top: 20px">
             <ve-line :data="data1"></ve-line>
         </el-row>
+        <p style="margin:30px 0">asdfadfs</p>
+        <p style="margin:30px 0">asdfadfs</p>
+        <p style="margin:30px 0">asdfadfs</p>
+        <p style="margin:30px 0">asdfadfs</p>
+        <p style="margin:30px 0">asdfadfs</p>
+        <p style="margin:30px 0">asdfadfs</p>
+        <p style="margin:30px 0">asdfadfs</p>
+        <p style="margin:30px 0">asdfadfs</p>
+        end----------------------
     </div>
 </template>
 <script>

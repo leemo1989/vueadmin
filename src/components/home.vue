@@ -1,25 +1,83 @@
 <template>
-    <el-container>
-        <el-header>
-            <div class="headerunit">1</div>
-            <div class="headerunit">11</div>
-            <div class="headerunit">1322</div>
-        </el-header>
-        <el-container>
+    <div>
+        <header>
+            <el-col :span="1">
+                <h1 style="padding-left:10px"><font color="red">G</font>oole</h1>
+            </el-col>
+            <el-col :span="3" style="display: flex;align-items: center">
+                <div class="sline"></div>
+                <h3 style="margin-left:20px">总览</h3>
+                <el-dropdown style="margin:0 20px" placement="top-start">
+                  <span class="el-dropdown-link">
+                    <b>应用管理</b><i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                        <div style="width: 500px;height: 300px;display: flex;justify-content: space-around">
+                          <div>
+                            <h3>自动化</h3>
+                            <el-divider></el-divider>
+                            <p><el-link icon="el-icon-s-promotion">作业平台</el-link></p>
+                              <p><el-link icon="el-icon-edit">配置管理</el-link></p>
+                          </div>
+                          <div>
+                            <h3>监控系统</h3>
+                            <el-divider></el-divider>
+                            <p><el-link icon="el-icon-share">资产管理平台</el-link></p>
+                          </div>
+                          <div>
+                            <h3>数据库</h3>
+                            <el-divider></el-divider>
+                            <p><el-link icon="el-icon-s-data">资产管理平台</el-link></p>
+                          </div>
+                        </div>
+                  </el-dropdown-menu>
+                </el-dropdown>
+            </el-col>
+            <el-col :span="18">
+                <div class="sline"></div>
+            </el-col>
+            <el-col :span="1" style="display: flex;align-items: center">
+                <el-badge :value="unreadnum" v-show="unreadnum >0">
+                    <el-button icon="fa fa-envelope-o fa-2x" size="small" style="border: none" @click="catmessage"></el-button>
+                </el-badge>
+                <div class="sline"></div>
+            </el-col>
+            <el-col :span="2" style="display: flex;align-items: center">
+                <el-avatar src="https://img2.woyaogexing.com/2019/08/09/7db9a484d93843f685a3c2b583580b97!400x400.jpeg"></el-avatar>
+                <el-dropdown style="margin:0 20px">
+                  <span class="el-dropdown-link">
+                    <b>王磊</b><i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>个人信息</el-dropdown-item>
+                    <el-dropdown-item>退出</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+                <div class="sline"></div>
+            </el-col>
+            <el-col :span="1">
+                <el-button icon="el-icon-s-unfold" @click="drawer = true" style="border: 0"></el-button>
+                <el-drawer
+                  title="我是标题"
+                  :visible.sync="drawer"
+                  :direction="direction"
+                  :before-close="handleClose">
+                  <span>我来啦!</span>
+                </el-drawer>
+            </el-col>
+        </header>
+        <div class="container">
             <el-aside :style="showside">
-                <div style="overflow: hidden;height: 50px;color:white;border-bottom:3px solid #101117">
+                <div style="overflow: hidden;height: 50px">
                     <div v-if="t" style="height:50px;display: flex;align-items: center;justify-content: center">
                         <img src="../assets/yhosa.png">
                     </div>
                     <div style="margin-left: 18px;height:50px;display: flex;align-items: center" v-else>
-                        <img src="../assets/yhosa.png" style="margin-right:10px;"><h2>YH监控平台</h2>
+                        <h2><font color="#3f6ad8">YH监控平台</font></h2>
                     </div>
                 </div>
 
-                <el-menu :router="true" :collapse="t" :collapse-transition="false"
-                    background-color="#191a23"
-                         text-color="#fff"
-                >
+                <el-menu :router="true" :collapse="t" :collapse-transition="false">
                     <el-menu-item index="/dashboard">
                         <i class="el-icon-upload"></i>
                         <span>总览</span>
@@ -74,37 +132,15 @@
                         <span>系统设置</span>
                     </el-menu-item>
                 </el-menu>
+                <el-col :span="1">
+                    <el-button icon="el-icon-menu" size="mini" @click="toggleshow" style="border: none"></el-button>
+                </el-col>
             </el-aside>
-            <el-main>
-                <el-row>
-                    <el-col :span="1">
-                        <el-button icon="el-icon-menu" size="mini" @click="toggleshow" style="border: none"></el-button>
-                    </el-col>
-                    <el-col :span="2">
-                        <el-breadcrumb>
-                            <el-breadcrumb-item :to="{path:'/'}">首页</el-breadcrumb-item>
-                            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-                        </el-breadcrumb>
-                    </el-col>
-                    <el-col :span="3" :offset="18">
-                        <el-badge :value="unreadnum" v-show="unreadnum >0">
-                            <el-button icon="fa fa-envelope-o fa-2x" size="small" style="border: none" @click="catmessage"></el-button>
-                        </el-badge>
-                        <el-divider direction="vertical"></el-divider>
-                        <el-dropdown trigger="click" size="mini" @command="handleCommand">
-                            <span><el-button circle icon="el-icon-user"></el-button> 王磊<i class="el-icon-arrow-down el-icon--right"></i></span>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item>登出</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
-                    </el-col>
-                </el-row>
-                <el-row style="height:500px;border: 1px solid blue">
-                    <router-view></router-view>
-                </el-row>
-            </el-main>
-        </el-container>
-    </el-container>
+            <div class="content">
+                <router-view></router-view>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 export default {
@@ -112,6 +148,7 @@ export default {
         return {
             showside:'width:230px',
             t:false,
+            drawer:false,
         }
     },
     computed:{
@@ -120,6 +157,13 @@ export default {
         }
     },
     methods:{
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
         catmessage(){
             this.$router.push('/message')
         },
@@ -139,38 +183,60 @@ export default {
 }
 </script>
 <style type="text/css">
+    .el-divider--horizontal{
+        margin:10px 0 !important;
+    }
+    header{
+        display: flex;
+        height: 60px;
+        background: #fafbfc;
+        align-items: center;
+        width: 100%;
+        box-shadow:0 0.46875rem 2.1875rem rgba(4,9,20,0.03), 0 0.9375rem 1.40625rem rgba(4,9,20,0.03), 0 0.25rem 0.53125rem rgba(4,9,20,0.05), 0 0.125rem 0.1875rem rgba(4,9,20,0.03);
+        position:fixed;
+        top:0;
+        z-index: 10;
+    }
     .el-badge__content.is-fixed{
         top:10px !important;
         right:20px !important;
     }
-    .el-main{
-        //height: 100%;
-        overflow: unset !important;
-        //background:rgba(248, 249, 252);
+    .sline{
+        background:#dee2e6;
+        height: 30px;width: 1px;
+        margin-left:10px;
     }
-    .el-container{
-        height: 50px;
+    .content{
+        background: #f1f4f6;
+        padding-top:20px;
+        padding-left:250px;
+        width: 100%;
+        overflow: auto;
+        padding-bottom: 80px;
     }
-    .headerunit{
-        display: table-cell;
-        vertical-align: top;
+    .container{
+        width: 100%;
+        padding-top:60px;
+        flex:1;
+        display: flex;
+        z-index: 8;
+        position: relative;
+        overflow: auto;
+        height: 100vh;
+
     }
     .el-breadcrumb{
         line-height: 50px
         !important;
     }
-    .el-header{
-        height: 50px !important;
-        line-height: 50px;
-        background: #262626;
-        box-shadow:0 .15rem 1.75rem 0 rgba(58,59,69,.15);
-    }
     .el-aside{
         height: 100vh;
-        background:#191a23;
-        box-shadow:2px 0 6px rgba(0,21,41,.35);
-        //z-index: 3;
-
+        box-shadow:7px 0 60px rgba(0,0,0,0.05);
+        position: fixed;
+        background: #fff;
+        width: 250px;
+        z-index:9;
+        overflow: hidden;
     }
     .el-menu-item{
         font-size:12px !important;
