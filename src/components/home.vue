@@ -2,7 +2,7 @@
     <div>
         <header>
             <el-col :span="1">
-                <h1 style="padding-left:10px"><font color="red">G</font>oole</h1>
+                <h1 style="padding-left:10px"><font color="red">3</font>7 Te</h1>
             </el-col>
             <el-col :span="3" style="display: flex;align-items: center">
                 <div class="sline"></div>
@@ -107,13 +107,13 @@
                         <i class="el-icon-s-grid"></i>
                         <span>Tab</span>
                     </el-menu-item>
-                    <el-menu-item index="2">
+                    <el-menu-item index="4">
                         <i class="el-icon-upload"></i>
                         <span>中间件监控</span>
                     </el-menu-item>
-                    <el-menu-item index="2">
+                    <el-menu-item index="/domain">
                         <i class="el-icon-upload"></i>
-                        <span>智能分析</span>
+                        <span>域名管理</span>
                     </el-menu-item>
                     <el-menu-item index="2">
                         <i class="el-icon-upload"></i>

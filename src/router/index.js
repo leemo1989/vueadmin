@@ -11,6 +11,7 @@ import dashboard from '@/components/dashboard'
 import message from '@/components/message'
 import unitwork from '@/components/unitwork'
 import taskwork from '@/components/taskwork'
+import domain from '@/components/domain'
 Vue.use(Router)
 
 export default new Router({
@@ -31,6 +32,7 @@ export default new Router({
             {path:'/dashboard',component:dashboard},
             {path:'/table',component:ttable},
             {path:'/form',component:tform},
+            {path:'/domain',component:domain},
             {path:'/message',component:message},
             {
                 path:'/yewu',

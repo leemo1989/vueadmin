@@ -1,8 +1,8 @@
 <template>
     <div class="login">
         <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span><b>欢迎登录</b></span>
+          <div slot="header" class="clearfix" style="text-align:center">
+            <span><b>37统一账号管理系统</b></span>
           </div>
           <div>
               <el-input placeholder="请输入用户名" v-model="username" size="medium">
