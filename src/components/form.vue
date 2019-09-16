@@ -1,5 +1,18 @@
 <template>
     <div class="bd">
+		<el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
+<el-dialog
+  title="提示"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :modal-append-to-body="false"
+  :before-close="handleClose">
+  <span>这是一段信息</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
 		<div>
 		<div>
 			<img class="main_img img-hover" data-imgurl="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2311555492,3901087256&amp;fm=26&amp;gp=0.jpg" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2311555492,3901087256&amp;fm=26&amp;gp=0.jpg" style="background-color: rgb(195, 177, 157); width: 100%; height: 149.741px;">
@@ -43,8 +56,18 @@ export default {
     name:"tform",
     data() {
         return {
+        	dialogVisible: false
         };
     },
+    methods: {
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      }
+    }
 }
 </script>
 <style>

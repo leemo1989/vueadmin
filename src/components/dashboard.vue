@@ -39,6 +39,42 @@
             </el-col>
         </el-row>
         <el-row style="margin-top: 20px" type="flex">
+            <el-col :span="8">
+                <el-card shadow="always" style="margin-right:15px;">
+                    <div slot="header">
+                        <span>自定义监控条件</span>
+                        <el-button style="float:right;padding:3px 0" type="text">操作按钮</el-button>
+                    </div>
+                    <div id="t10" style="height: 250px;width: 100%;text-align: center;overflow: hidden">
+                        <h2>可异步更新，总在线人数：<h1>{{asynEndVal}}</h1></h2>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="8">
+                <el-card shadow="always" style="margin-right:15px;">
+                    <div slot="header">
+                        <span>自定义监控条件</span>
+                        <el-button style="float:right;padding:3px 0" type="text">操作按钮</el-button>
+                    </div>
+                    <div id="t11" style="height: 250px;width: 100%;text-align: center;overflow: hidden">
+                        <h2>可异步更新，总报警数量：<h1><font color="red"> {{integratedEndVal}}</font></h1></h2>
+
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="8">
+                <el-card shadow="always" style="margin-right:15px;">
+                    <div slot="header">
+                        <span>自定义单元展示</span>
+                        <el-button style="float:right;padding:3px 0" type="text">操作按钮</el-button>
+                    </div>
+                    <div id="t20" style="height: 250px;width: 100%">
+
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row style="margin-top: 20px" type="flex">
             <el-col :span="12">
                 <el-card shadow="always" style="margin-right:15px;">
                     <div slot="header">
@@ -81,6 +117,23 @@ export default {
     name:"dashboard",
     data() {
         return {
+            asynEndVal: 150,
+            integratedEndVal: 3,
+            option2 : {
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',6,7,8,9,0,11]
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: [820, 932, 901, 934, 1290, 1330, 1320,5,8,12,24,55,777],
+                    type: 'line',
+                    areaStyle: {}
+                }]
+            },
             data1:{
                 columns:['日期','注册用户','登陆用户','转换率'],
                 rows:[
@@ -206,14 +259,23 @@ export default {
     	handleclick(){
     		this.$router.push('/mot')
 		},
-
+        init () {
+          setInterval(() => {
+            this.asynEndVal += parseInt(Math.random() * 20)
+            this.integratedEndVal += parseInt(Math.random() * 30)
+          }, 1000)
+        }
 	},
 	mounted(){
+        this.init();
     	var myChart = this.$echarts.init(document.getElementById('t1'));
 		myChart.setOption(this.option1);
 		//
         var myChart1 = this.$echarts.init(document.getElementById('t2'));
         myChart1.setOption(this.option);
+        //
+        var myChart2 = this.$echarts.init(document.getElementById('t20'));
+        myChart2.setOption(this.option2);
 	}
 }
 </script>

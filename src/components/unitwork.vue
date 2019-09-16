@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <el-card>
       <el-form ref="form" :model="form" label-width="100px" size="small">
         <el-form-item label="单元名称">
           <el-input v-model="form.name"></el-input>
@@ -35,7 +35,7 @@
           <el-button>取消</el-button>
         </el-form-item>
       </el-form>
-    </div>
+</el-card>
 </template>
 
 <script>

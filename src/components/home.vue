@@ -1,11 +1,12 @@
 <template>
     <div>
         <header>
-            <el-col :span="1">
-                <h1 style="padding-left:10px"><font color="red">3</font>7 Te</h1>
+            <el-col :span="2" style="width:245px">
+                <h1 style="padding-left:15px"><font color="red"><font size="6">37</font></font> 运维平台</h1>
             </el-col>
             <el-col :span="3" style="display: flex;align-items: center">
                 <div class="sline"></div>
+                <el-button :icon="t?'el-icon-s-grid':'el-icon-menu'" @click="toggleshow" style="border: none"></el-button>
                 <h3 style="margin-left:20px">总览</h3>
                 <el-dropdown style="margin:0 20px" placement="top-start">
                   <span class="el-dropdown-link">
@@ -33,7 +34,7 @@
                   </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="17">
                 <div class="sline"></div>
             </el-col>
             <el-col :span="1" style="display: flex;align-items: center">
@@ -49,8 +50,8 @@
                     <b>王磊</b><i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>个人信息</el-dropdown-item>
-                    <el-dropdown-item>退出</el-dropdown-item>
+                      <el-dropdown-item>个人信息</el-dropdown-item>
+                      <el-dropdown-item><router-link to="/login">退出</router-link></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
                 <div class="sline"></div>
@@ -60,23 +61,13 @@
                 <el-drawer
                   title="我是标题"
                   :visible.sync="drawer"
-                  :direction="direction"
                   :before-close="handleClose">
                   <span>我来啦!</span>
                 </el-drawer>
             </el-col>
         </header>
         <div class="container">
-            <el-aside :style="showside">
-                <div style="overflow: hidden;height: 50px">
-                    <div v-if="t" style="height:50px;display: flex;align-items: center;justify-content: center">
-                        <img src="../assets/yhosa.png">
-                    </div>
-                    <div style="margin-left: 18px;height:50px;display: flex;align-items: center" v-else>
-                        <h2><font color="#3f6ad8">YH监控平台</font></h2>
-                    </div>
-                </div>
-
+            <div class="easide" :class="{showleftnav:!t,hideleftnav:t}">
                 <el-menu :router="true" :collapse="t" :collapse-transition="false">
                     <el-menu-item index="/dashboard">
                         <i class="el-icon-upload"></i>
@@ -132,11 +123,8 @@
                         <span>系统设置</span>
                     </el-menu-item>
                 </el-menu>
-                <el-col :span="1">
-                    <el-button icon="el-icon-menu" size="mini" @click="toggleshow" style="border: none"></el-button>
-                </el-col>
-            </el-aside>
-            <div class="content">
+            </div>
+            <div class="content" :class="{showcont:!t,hidecont:t}">
                 <router-view></router-view>
             </div>
         </div>
@@ -146,7 +134,6 @@
 export default {
     data(){
         return {
-            showside:'width:230px',
             t:false,
             drawer:false,
         }
@@ -157,6 +144,10 @@ export default {
         }
     },
     methods:{
+        lougout(){
+            console.log(1111)
+          this.$route.push('/login')
+        },
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
@@ -186,6 +177,12 @@ export default {
     .el-divider--horizontal{
         margin:10px 0 !important;
     }
+    /* 此处用来缩放页面，对应4个css，导航和内容页 */
+    .showleftnav {width:230px;}
+    .hideleftnav {width:66px;}
+    .showcont{padding-left:250px;}
+    .hidecont{padding-left:86px;}
+    /* 缩放css end */
     header{
         display: flex;
         height: 60px;
@@ -195,7 +192,7 @@ export default {
         box-shadow:0 0.46875rem 2.1875rem rgba(4,9,20,0.03), 0 0.9375rem 1.40625rem rgba(4,9,20,0.03), 0 0.25rem 0.53125rem rgba(4,9,20,0.05), 0 0.125rem 0.1875rem rgba(4,9,20,0.03);
         position:fixed;
         top:0;
-        z-index: 10;
+        z-index: 3;
     }
     .el-badge__content.is-fixed{
         top:10px !important;
@@ -209,7 +206,7 @@ export default {
     .content{
         background: #f1f4f6;
         padding-top:20px;
-        padding-left:250px;
+
         width: 100%;
         overflow: auto;
         padding-bottom: 80px;
@@ -219,7 +216,7 @@ export default {
         padding-top:60px;
         flex:1;
         display: flex;
-        z-index: 8;
+        z-index: 1;
         position: relative;
         overflow: auto;
         height: 100vh;
@@ -229,13 +226,12 @@ export default {
         line-height: 50px
         !important;
     }
-    .el-aside{
+    .easide{
         height: 100vh;
         box-shadow:7px 0 60px rgba(0,0,0,0.05);
         position: fixed;
         background: #fff;
-        width: 250px;
-        z-index:9;
+        z-index:2;
         overflow: hidden;
     }
     .el-menu-item{
