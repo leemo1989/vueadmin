@@ -4,7 +4,7 @@
             <el-col :span="2" style="width:245px">
                 <h1 style="padding-left:15px"><font color="red"><font size="6">37</font></font> 运维平台</h1>
             </el-col>
-            <el-col :span="3" style="display: flex;align-items: center">
+            <el-col :span="4" style="display: flex;align-items: center">
                 <div class="sline"></div>
                 <el-button :icon="t?'el-icon-s-grid':'el-icon-menu'" @click="toggleshow" style="border: none"></el-button>
                 <h3 style="margin-left:20px">总览</h3>
@@ -34,7 +34,7 @@
                   </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
-            <el-col :span="17">
+            <el-col :span="16">
                 <div class="sline"></div>
             </el-col>
             <el-col :span="1" style="display: flex;align-items: center">
@@ -98,9 +98,9 @@
                         <i class="el-icon-s-grid"></i>
                         <span>Tab</span>
                     </el-menu-item>
-                    <el-menu-item index="4">
+                    <el-menu-item index="/dorder">
                         <i class="el-icon-upload"></i>
-                        <span>中间件监控</span>
+                        <span>域名工单</span>
                     </el-menu-item>
                     <el-menu-item index="/domain">
                         <i class="el-icon-upload"></i>

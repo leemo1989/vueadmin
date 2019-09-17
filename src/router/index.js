@@ -12,6 +12,8 @@ import message from '@/components/message'
 import unitwork from '@/components/unitwork'
 import taskwork from '@/components/taskwork'
 import domain from '@/components/domain'
+import dorder from '@/components/dorder'
+import dorderd from '@/components/dorderd'
 Vue.use(Router)
 
 export default new Router({
@@ -33,6 +35,11 @@ export default new Router({
             {path:'/table',component:ttable},
             {path:'/form',component:tform},
             {path:'/domain',component:domain},
+            {path:'/dorderd',component:dorderd},
+            {
+                path:'/dorder',
+                component:dorder,
+            },
             {path:'/message',component:message},
             {
                 path:'/yewu',

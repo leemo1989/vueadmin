@@ -4,88 +4,59 @@
 			 element-loading-background="rgba(0, 0, 0, 0.8)"
 			 element-loading-spinner="el-icon-loading"
 	>
-		<!--内容-->
-        <!--el-button type="primary" @click="handlebuy">申请域名</el-button-->
-        <el-button>导出</el-button>
-        <el-button type="primary" style="float:right">显示框</el-button>
-        <br><br>
-		<el-input
-				size="mini"
-		  v-model="searchContent"
-		  placeholder="请选择对应搜索类目后，输入搜索内容"
-		  >
-			<el-select v-model="keyword" slot="prepend" placeholder="查询项" style="width:120px">
-				<el-option value="title" label="标题"></el-option>
-			</el-select>
-			<el-button @click="query" slot="append" icon="el-icon-search"></el-button>
-		</el-input>
-	  <el-table :data="items"  v-loading="serverTableLoading" size="mini" @filter-change="filterTag">
+	  <div slot="header" class="clearfix">
+			<el-button type="primary" @click="handlebuy">工单申请</el-button>
+			<!--el-button>导出</el-button-->
+	  </div>
+	  <el-table :data="items"  v-loading="serverTableLoading" size="mini" @filter-change="filterTag" border stripe>
 		<el-table-column
-		  prop="project_name"
-          :filters="plist"
-		  label="域名">
+		  prop="id"
+		  label="工单号"
+		  width="90"
+		  >
 		</el-table-column>
 		<el-table-column
-		  prop="l_titie"
-		  label="注册/到期时间"
+		  prop="up_name"
+		  label="流程类型"
+		  width="120"
 		  >
-			<template slot-scope="scope">
-                2017-10-25/2019-11-25
+		</el-table-column>
+		<el-table-column
+		  prop="rev_user"
+		  label="申请原因"
+		  >
+			<template>
+                <span>需要申请一个域名，用来XXXXX</span>
 			</template>
 		</el-table-column>
 		<el-table-column
 		  prop="appli_user"
-		  label="剩余天数"
+		  label="申请人"
 		  width="90"
 		  >
-			<template slot-scope="scope">
-                <el-tag v-if="scope.row.project_name == '37.com'" type="danger" size="mini">32</el-tag>
-                <span v-else>68</span>
+			<template>
+                <span>王磊</span>
 			</template>
 		</el-table-column>
 		<el-table-column
-		  prop="appli_time"
-		  label="备案公司"
-		  width="200"
+		  prop="l_titie"
+		  label="申请时间"
 		  >
+			<template slot-scope="scope">
+                2019-11-25 17:28:34
+			</template>
 		</el-table-column>
 
-		<el-table-column
-		  prop="rev_user"
-		  label="备案号"
-		  >
-		</el-table-column>
-		<el-table-column
-		  prop="rev_time"
-		  label="注册公司"
-		  >
-		</el-table-column>
-		<el-table-column
-		  prop="rev_time"
-		  label="域名解析商帐号"
-		  >
-			<template slot-scope="scope">
-                gndnspod@37.com
-			</template>
-		</el-table-column>
 
 		<el-table-column
 		  prop="log_state"
-		  label="网站状态码"
-          width="80"
+		  label="流程状态"
+          width="100"
 		  >
 			<template slot-scope="scope">
-				<el-tag v-if="scope.row.log_state == 0"  size="mini" type="success">200</el-tag>
-				<el-tag v-if="scope.row.log_state == 1" type="danger" size="mini">404</el-tag>
-                <el-tag v-if="scope.row.log_state == 2" type="warning" size="mini">无法连接</el-tag>
-			</template>
-		</el-table-column>
-		<el-table-column
-		  prop="l_tip"
-		  label="更新时间"
-		  >
-			<template slot-scope="scope">
-                1分钟前
+				<el-tag v-if="scope.row.log_state == 0"  size="mini" type="info">已结束</el-tag>
+				<el-tag v-if="scope.row.log_state == 1" type="danger" size="mini">错误</el-tag>
+                <el-tag v-if="scope.row.log_state == 2" type="warning" size="mini">等待审批</el-tag>
 			</template>
 		</el-table-column>
 		<el-table-column
@@ -94,8 +65,9 @@
 		  width="150"
 			>
 			<template slot-scope="scope">
-				<el-button size="mini" v-if="scope.row.appli_time == ''" @click="onedit(scope.row)">编辑</el-button>
-				<el-button size="mini" type="danger" @click="ondel">删除</el-button>
+				<el-button size="mini" @click="oncat">查看</el-button>
+				<el-button size="mini" v-if="scope.row.log_state == 2" @click="onedit(scope.row)">编辑</el-button>
+				<!--el-button size="mini" type="danger" @click="ondel">删除</el-button-->
 			</template>
 		</el-table-column>
 	  </el-table>
@@ -151,50 +123,17 @@
 		</el-dialog>
 
 		<el-dialog
-		  title="申请域名"
+		  title="申请工单"
 		  :modal-append-to-body="false"
 		  :visible.sync="dialogVisible1"
 		  width="30%">
 			<el-form ref="form" :model="form" label-width="80px">
-			  <el-form-item label="域名">
-				<el-input v-model="form.name"></el-input>
-			  </el-form-item>
-			  <el-form-item label="分组">
-				  <el-cascader
-					v-model="value"
-					:options="options"
-					@change="handleChange"></el-cascader>
-			  </el-form-item>
-			  <el-form-item label="注册公司">
+			  <el-form-item label="工单类型">
 				<el-select v-model="form.region" placeholder="请选择注册公司">
-				  <el-option label="易名中国" value="shanghai"></el-option>
-				  <el-option label="美橙互联" value="beijing"></el-option>
+				  <el-option label="域名申请" value="shanghai"></el-option>
+				  <el-option label="证书申请" value="beijing"></el-option>
+					<el-option label="DNS更改套餐" value="beijing"></el-option>
 				</el-select>
-			  </el-form-item>
-			  <el-form-item label="有效时间">
-				<el-col :span="11">
-				  <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-				</el-col>
-			  </el-form-item>
-			  <el-form-item label="购买证书">
-				<el-switch v-model="form.delivery"></el-switch>
-			  </el-form-item>
-			  <!--el-form-item label="活动性质">
-				<el-checkbox-group v-model="form.type">
-				  <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-				  <el-checkbox label="地推活动" name="type"></el-checkbox>
-				  <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-				  <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-				</el-checkbox-group>
-			  </el-form-item>
-			  <el-form-item label="特殊资源">
-				<el-radio-group v-model="form.resource">
-				  <el-radio label="线上品牌商赞助"></el-radio>
-				  <el-radio label="线下场地免费"></el-radio>
-				</el-radio-group>
-			  </el-form-item-->
-			  <el-form-item label="备注">
-				<el-input type="textarea" v-model="form.desc"></el-input>
 			  </el-form-item>
 			  <el-form-item>
 				<el-button type="primary" @click="onbuy">立即申请</el-button>
@@ -207,20 +146,16 @@
 
 <script>
 export default {
-    name:"domain",
+    name:"dorder",
     data() {
         return {
 			items:[
-			    {"up_name": "desktop.ini", "project_name": "37.com", "up_type": "down1", "l_tip": "", "up_out": "innet", "up_key": "", "up_md5": "9e36cc3537ee9ee1e3b10fa4e761045b", "rev_time": "美橙互联", "new_fname": "1559814902_desktop.ini", "appli_user": "2019-11-25", "log_state": 2, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "2013-11-25", "rev_user": "沪ICP备17030769号-5", "up_url": "", "id": 455, "up_eem": ""},
-                {"up_name": "201905302027_ahys_banshu1_1.0.16_999_2930.apk", "project_name": "37api.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "5cd0f2b2166d40af614f7ba0dbe96b68", "rev_time": "美橙互联", "new_fname": "1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050530-2", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.html", "id": 449, "up_eem": "https://download.01234.com.cn:8003/1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.html"},
-                {"up_name": "20190530ahys_banshu1_1.0.16_999.apk", "project_name": "37wan.ac.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "5acb8eef5e86c1d7ec1b739b48117bb8", "rev_time": "美橙互联", "new_fname": "1559191526_20190530ahys_banshu1_1.0.16_999.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050530", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1559191526_20190530ahys_banshu1_1.0.16_999.html", "id": 448, "up_eem": "https://download.01234.com.cn:8003/1559191526_20190530ahys_banshu1_1.0.16_999.html"},
-                {"up_name": "sc01_ahys_banshu1_1.0.16_999.apk", "project_name": "37wan.gx.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "66c2064a736b5439b17bd030ba960a02", "rev_time": "美橙互联", "new_fname": "1558962484_sc01_ahys_banshu1_1.0.16_999.apk", "appli_user": "yuzhengxiong", "log_state": 1, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050527-2", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1558962484_sc01_ahys_banshu1_1.0.16_999.html", "id": 443, "up_eem": "https://download.01234.com.cn:8003/1558962484_sc01_ahys_banshu1_1.0.16_999.html"},
-                {"up_name": "20190527185128_sc01_ahys_banshu1_1.0.16_999_2019527185323.apk", "project_name": "d84a43bc.com", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "03e0b5501fcedb3fc439df92366105d2", "rev_time": "美橙互联", "new_fname": "1558958762_20190527185128_sc01_ahys_banshu1_1.0.16_999_2019527185323.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050527", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1558958762_20190527185128_sc01_ahys_banshu1_1.0.16_999_2019527185323.html", "id": 442, "up_eem": "https://download.01234.com.cn:8003/1558958762_20190527185128_sc01_ahys_banshu1_1.0.16_999_2019527185323.html"},
-                {"up_name": "20190510173354_Unity-iPhone_syjl2019.ipa", "project_name": "37wan.cq.cn", "up_type": "down2", "l_tip": "\u795e\u4fd1\u964d\u4e34IOS\u7248\u7f72\u530520190222_2", "up_out": "allnet", "up_key": "com.yh.syjl.001", "up_md5": "4c7a51fd2984519ebf7e9ffa61394d3d", "rev_time": "美橙互联", "new_fname": "1557482528_20190510173354_Unity-iPhone_syjl2019.ipa", "appli_user": "xiaolirong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u795e\u4fd1\u964d\u4e34IOS\u7248\u7f72\u530520190222_2", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1557482528_20190510173354_Unity-iPhone_syjl2019.html", "id": 434, "up_eem": "https://download.01234.com.cn:8003/1557482528_20190510173354_Unity-iPhone_syjl2019.html"},
-                {"up_name": "20190510160926_sc01_ahys_1.0.15_999_2019510160837.apk", "project_name": "6711.ws", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "7d5b3e39c9f83f4056beb8be76505fbc", "rev_time": "美橙互联", "new_fname": "1557477315_20190510160926_sc01_ahys_1.0.15_999_2019510160837.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "上海硬通网络科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050510-3", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1557477315_20190510160926_sc01_ahys_1.0.15_999_2019510160837.html", "id": 433, "up_eem": "https://download.01234.com.cn:8003/1557477315_20190510160926_sc01_ahys_1.0.15_999_2019510160837.html"},
-                {"up_name": "2019_ahys_1.0.15_999.apk", "project_name": "gm99.asia", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "558c46c81d83cf3c160d0df1d03ce682", "rev_time": "美橙互联", "new_fname": "1557458603_2019_ahys_1.0.15_999.apk", "appli_user": "yuzhengxiong", "log_state": 1, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050510\u4fee\u6539", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1557458603_2019_ahys_1.0.15_999.html", "id": 432, "up_eem": "https://download.01234.com.cn:8003/1557458603_2019_ahys_1.0.15_999.html"},
-                {"up_name": "20190510095953_sc01_ahys_banshu1_1.0.15_999_201951095914.apk", "project_name": "gm99.com.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "a7a23f6b0525fb285ce7520a8b67a279", "rev_time": "美橙互联", "new_fname": "1557455426_20190510095953_sc01_ahys_banshu1_1.0.15_999_201951095914.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "上海硬通网络科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050510", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1557455426_20190510095953_sc01_ahys_banshu1_1.0.15_999_201951095914.html", "id": 431, "up_eem": "https://download.01234.com.cn:8003/1557455426_20190510095953_sc01_ahys_banshu1_1.0.15_999_201951095914.html"},
-                {"up_name": "20190430150624_Unity-iPhone_syjl2019.ipa", "project_name": "gmthai.net.cn", "up_type": "down2", "l_tip": "\u795e\u4fd1\u964d\u4e34IOS\u4e3b\u5e72\u4f53\u9a8c\u530520190430", "up_out": "allnet", "up_key": "com.yh.syjl.001", "up_md5": "588fb45b3b9ac07572305f56803b1202", "rev_time": "美橙互联", "new_fname": "1556618109_20190430150624_Unity-iPhone_syjl2019.ipa", "appli_user": "xiaolirong", "log_state": 0, "appli_time": "上海硬通网络科技有限公司", "l_titie": "\u795e\u4fd1\u964d\u4e34IOS\u4e3b\u5e72\u4f53\u9a8c\u530520190430", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1556618109_20190430150624_Unity-iPhone_syjl2019.html", "id": 427, "up_eem": "https://download.01234.com.cn:8003/1556618109_20190430150624_Unity-iPhone_syjl2019.html"}],
+			    {"up_name": "域名申请", "project_name": "37.com", "up_type": "down1", "l_tip": "", "up_out": "innet", "up_key": "", "up_md5": "9e36cc3537ee9ee1e3b10fa4e761045b", "rev_time": "美橙互联", "new_fname": "1559814902_desktop.ini", "appli_user": "2019-11-25", "log_state": 2, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "2013-11-25", "rev_user": "沪ICP备17030769号-5", "up_url": "", "id": 455, "up_eem": ""},
+                {"up_name": "证书申请", "project_name": "37api.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "5cd0f2b2166d40af614f7ba0dbe96b68", "rev_time": "美橙互联", "new_fname": "1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050530-2", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.html", "id": 449, "up_eem": "https://download.01234.com.cn:8003/1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.html"},
+                {"up_name": "证书申请", "project_name": "37wan.ac.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "5acb8eef5e86c1d7ec1b739b48117bb8", "rev_time": "美橙互联", "new_fname": "1559191526_20190530ahys_banshu1_1.0.16_999.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050530", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1559191526_20190530ahys_banshu1_1.0.16_999.html", "id": 448, "up_eem": "https://download.01234.com.cn:8003/1559191526_20190530ahys_banshu1_1.0.16_999.html"},
+                {"up_name": "证书申请", "project_name": "37wan.gx.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "66c2064a736b5439b17bd030ba960a02", "rev_time": "美橙互联", "new_fname": "1558962484_sc01_ahys_banshu1_1.0.16_999.apk", "appli_user": "yuzhengxiong", "log_state": 1, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050527-2", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1558962484_sc01_ahys_banshu1_1.0.16_999.html", "id": 443, "up_eem": "https://download.01234.com.cn:8003/1558962484_sc01_ahys_banshu1_1.0.16_999.html"},
+                {"up_name": "DNS套餐更改", "project_name": "d84a43bc.com", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "03e0b5501fcedb3fc439df92366105d2", "rev_time": "美橙互联", "new_fname": "1558958762_20190527185128_sc01_ahys_banshu1_1.0.16_999_2019527185323.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050527", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1558958762_20190527185128_sc01_ahys_banshu1_1.0.16_999_2019527185323.html", "id": 442, "up_eem": "https://download.01234.com.cn:8003/1558958762_20190527185128_sc01_ahys_banshu1_1.0.16_999_2019527185323.html"},
+                {"up_name": "域名申请", "project_name": "gmthai.net.cn", "up_type": "down2", "l_tip": "\u795e\u4fd1\u964d\u4e34IOS\u4e3b\u5e72\u4f53\u9a8c\u530520190430", "up_out": "allnet", "up_key": "com.yh.syjl.001", "up_md5": "588fb45b3b9ac07572305f56803b1202", "rev_time": "美橙互联", "new_fname": "1556618109_20190430150624_Unity-iPhone_syjl2019.ipa", "appli_user": "xiaolirong", "log_state": 0, "appli_time": "上海硬通网络科技有限公司", "l_titie": "\u795e\u4fd1\u964d\u4e34IOS\u4e3b\u5e72\u4f53\u9a8c\u530520190430", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1556618109_20190430150624_Unity-iPhone_syjl2019.html", "id": 427, "up_eem": "https://download.01234.com.cn:8003/1556618109_20190430150624_Unity-iPhone_syjl2019.html"}],
 			keyword:'title',
 			pagenum:1,
 			radio2:'高',
@@ -241,7 +176,7 @@ export default {
 			selectproject:[],
 			form: {
 			  name: '',
-			  region: '易名中国',
+			  region: '域名申请',
 			  date1: '',
 			  date2: '',
 			  delivery: false,
@@ -447,6 +382,9 @@ export default {
         };
     },
 	methods:{
+    	oncat(){
+    		this.$router.push('/dorderd')
+		},
     	ondel(){
 			this.$confirm('此操作将会一并注销【域名主体】, 是否继续?', '提示', {
 			  confirmButtonText: '确定',
@@ -463,16 +401,7 @@ export default {
 			this.dialogVisible2 = true
 		},
     	onbuy(){
-    		this.dialogVisible1=false
-			this.loading = true
-			setTimeout(() => {
-			  this.loading = false;
-				this.$message({
-				  message: '申请成功',
-				  type: 'success'
-				});
-				this.items.unshift({"up_name": "desktop.ini", "project_name":this.form.name, "up_type": "down1", "l_tip": "", "up_out": "innet", "up_key": "", "up_md5": "9e36cc3537ee9ee1e3b10fa4e761045b", "rev_time":this.form.region, "new_fname": "1559814902_desktop.ini", "appli_user": "2019-11-25", "log_state": 2, "appli_time": "", "l_titie": "2013-11-25", "rev_user": "", "up_url": "", "id": 455, "up_eem": ""})
-			}, 2000);
+    		this.$router.push('/dorderd')
 		},
     	handlebuy(){
     		this.dialogVisible1 = true
