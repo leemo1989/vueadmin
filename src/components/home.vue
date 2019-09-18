@@ -2,7 +2,7 @@
     <div>
         <header>
             <el-col :span="2" style="width:245px">
-                <h1 style="padding-left:15px"><font color="red"><font size="6">37</font></font> 运维平台</h1>
+                <h1 style="padding-left:15px"><font color="red"><font size="6">37AI</font></font> 运维平台</h1>
             </el-col>
             <el-col :span="4" style="display: flex;align-items: center">
                 <div class="sline"></div>

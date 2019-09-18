@@ -109,12 +109,6 @@
 				  <el-radio-button label="其他"></el-radio-button>
 				</el-radio-group>
 			  </el-form-item>
-			  <!--el-form-item label="特殊资源">
-				<el-radio-group v-model="form.resource">
-				  <el-radio label="线上品牌商赞助"></el-radio>
-				  <el-radio label="线下场地免费"></el-radio>
-				</el-radio-group>
-			  </el-form-item-->
 			  <el-form-item>
 				<el-button type="primary" @click="dialogVisible2 = false">更新</el-button>
 				<el-button @click="dialogVisible2 = false">取消</el-button>
@@ -129,10 +123,10 @@
 		  width="30%">
 			<el-form ref="form" :model="form" label-width="80px">
 			  <el-form-item label="工单类型">
-				<el-select v-model="form.region" placeholder="请选择注册公司">
-				  <el-option label="域名申请" value="shanghai"></el-option>
-				  <el-option label="证书申请" value="beijing"></el-option>
-					<el-option label="DNS更改套餐" value="beijing"></el-option>
+				<el-select v-model="rtype">
+				  <el-option label="域名申请" value="域名申请"></el-option>
+				  <el-option label="证书申请" value="证书申请"></el-option>
+					<el-option label="DNS更改套餐" value="DNS更改套餐"></el-option>
 				</el-select>
 			  </el-form-item>
 			  <el-form-item>
@@ -149,6 +143,7 @@ export default {
     name:"dorder",
     data() {
         return {
+            rtype:'域名申请',
 			items:[
 			    {"up_name": "域名申请", "project_name": "37.com", "up_type": "down1", "l_tip": "", "up_out": "innet", "up_key": "", "up_md5": "9e36cc3537ee9ee1e3b10fa4e761045b", "rev_time": "美橙互联", "new_fname": "1559814902_desktop.ini", "appli_user": "2019-11-25", "log_state": 2, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "2013-11-25", "rev_user": "沪ICP备17030769号-5", "up_url": "", "id": 455, "up_eem": ""},
                 {"up_name": "证书申请", "project_name": "37api.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "5cd0f2b2166d40af614f7ba0dbe96b68", "rev_time": "美橙互联", "new_fname": "1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050530-2", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.html", "id": 449, "up_eem": "https://download.01234.com.cn:8003/1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.html"},
@@ -176,7 +171,6 @@ export default {
 			selectproject:[],
 			form: {
 			  name: '',
-			  region: '域名申请',
 			  date1: '',
 			  date2: '',
 			  delivery: false,
@@ -401,7 +395,13 @@ export default {
 			this.dialogVisible2 = true
 		},
     	onbuy(){
-    		this.$router.push('/dorderd')
+            if(this.rtype == '证书申请'){
+                this.$router.push('/dorderzs')
+            }else if(this.rtype == '域名申请'){
+                this.$router.push('/dorderd')
+            }else if(this.rtype == 'DNS更改套餐'){
+                this.$router.push('/dorderdns')
+            }
 		},
     	handlebuy(){
     		this.dialogVisible1 = true

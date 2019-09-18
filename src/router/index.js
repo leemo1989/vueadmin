@@ -11,9 +11,11 @@ import dashboard from '@/components/dashboard'
 import message from '@/components/message'
 import unitwork from '@/components/unitwork'
 import taskwork from '@/components/taskwork'
-import domain from '@/components/domain'
-import dorder from '@/components/dorder'
-import dorderd from '@/components/dorderd'
+import domain from '@/views/Mdomain/domain'
+import dorder from '@/views/Mdomain/dorder'
+import dorderd from '@/views/Mdomain/dorderd'
+import dorderzs from '@/views/Mdomain/dorderzs'
+import dorderdns from '@/views/Mdomain/dorderdns'
 Vue.use(Router)
 
 export default new Router({
@@ -34,8 +36,16 @@ export default new Router({
             {path:'/dashboard',component:dashboard},
             {path:'/table',component:ttable},
             {path:'/form',component:tform},
-            {path:'/domain',component:domain},
-            {path:'/dorderd',component:dorderd},
+            {
+                path:'/domain/:action',component:domain,
+                children: [
+                    {path:'',component:domain}
+                    {path:'order',component:dorderd}
+                ]
+            },
+            {path:'/dorderd/',component:dorderd},
+            {path:'/dorderzs/',component:dorderzs},
+            {path:'/dorderdns/',component:dorderdns},
             {
                 path:'/dorder',
                 component:dorder,

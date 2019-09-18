@@ -1,13 +1,18 @@
 <template>
-    <el-card v-loading="loading"
+    <!--el-card v-loading="loading"
 		element-loading-text="正在购买中"
 			 element-loading-background="rgba(0, 0, 0, 0.8)"
 			 element-loading-spinner="el-icon-loading"
-	>
+	-->
+
+  <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
+    <el-tab-pane label="使用中" name="first">
 		<!--内容-->
         <!--el-button type="primary" @click="handlebuy">申请域名</el-button-->
-        <el-button>导出</el-button>
-        <el-button type="primary" style="float:right">显示框</el-button>
+
+		<el-button type="danger" @click="ondel">批量删除</el-button>
+		<el-button type="primary">导出</el-button>
+        <el-button type="primary" style="float:right" @click="showmore = true">显示框</el-button>
         <br><br>
 		<el-input
 				size="mini"
@@ -21,22 +26,38 @@
 		</el-input>
 	  <el-table :data="items"  v-loading="serverTableLoading" size="mini" @filter-change="filterTag">
 		<el-table-column
+		  type="selection"
+		  width="55">
+		</el-table-column>
+		<el-table-column
 		  prop="project_name"
           :filters="plist"
+		  width="150"
+		  fixed
 		  label="域名">
 		</el-table-column>
 		<el-table-column
 		  prop="l_titie"
-		  label="注册/到期时间"
+		  label="注册时间"
+		  width="90"
 		  >
 			<template slot-scope="scope">
-                2017-10-25/2019-11-25
+                2017-10-25
+			</template>
+		</el-table-column>
+		<el-table-column
+		  prop="l_titie"
+		  width="90"
+		  label="到期时间"
+		  >
+			<template slot-scope="scope">
+                2019-11-25
 			</template>
 		</el-table-column>
 		<el-table-column
 		  prop="appli_user"
 		  label="剩余天数"
-		  width="90"
+		  width="70"
 		  >
 			<template slot-scope="scope">
                 <el-tag v-if="scope.row.project_name == '37.com'" type="danger" size="mini">32</el-tag>
@@ -53,22 +74,53 @@
 		<el-table-column
 		  prop="rev_user"
 		  label="备案号"
+		  width="150"
 		  >
 		</el-table-column>
 		<el-table-column
 		  prop="rev_time"
 		  label="注册公司"
+		  width="90"
 		  >
 		</el-table-column>
 		<el-table-column
 		  prop="rev_time"
 		  label="域名解析商帐号"
+		  width="150"
 		  >
 			<template slot-scope="scope">
                 gndnspod@37.com
 			</template>
 		</el-table-column>
-
+		  <el-table-column
+		  prop="appli_time"
+		  label="业务负责人"
+		  width="200"
+		  >
+		</el-table-column>
+		</el-table-column>
+		  <el-table-column
+		  prop="appli_time"
+		  label="云厂商接入情况"
+		  width="200"
+		  >
+		</el-table-column>
+		</el-table-column>
+		  <el-table-column
+		  prop="appli_time"
+		  label="业务负责人"
+		  width="200"
+		  >
+		</el-table-column>
+		<el-table-column
+		  prop="rev_time"
+		  label="域名状态"
+		  width="90"
+		  >
+			<template slot-scope="scope">
+                <el-tag type="primary" size="mini">正常</el-tag>
+			</template>
+		</el-table-column>
 		<el-table-column
 		  prop="log_state"
 		  label="网站状态码"
@@ -83,6 +135,7 @@
 		<el-table-column
 		  prop="l_tip"
 		  label="更新时间"
+		  width="100"
 		  >
 			<template slot-scope="scope">
                 1分钟前
@@ -91,7 +144,8 @@
 		<el-table-column
 		  prop="log_state"
 		  label="操作"
-		  width="150"
+		  fixed="right"
+		  width="80"
 			>
 			<template slot-scope="scope">
 				<el-button size="mini" v-if="scope.row.appli_time == ''" @click="onedit(scope.row)">编辑</el-button>
@@ -137,19 +191,31 @@
 				  <el-radio-button label="其他"></el-radio-button>
 				</el-radio-group>
 			  </el-form-item>
-			  <!--el-form-item label="特殊资源">
-				<el-radio-group v-model="form.resource">
-				  <el-radio label="线上品牌商赞助"></el-radio>
-				  <el-radio label="线下场地免费"></el-radio>
-				</el-radio-group>
-			  </el-form-item-->
 			  <el-form-item>
 				<el-button type="primary" @click="dialogVisible2 = false">更新</el-button>
 				<el-button @click="dialogVisible2 = false">取消</el-button>
 			  </el-form-item>
 			</el-form>
 		</el-dialog>
-
+<el-dialog
+  title="表格展示项"
+  :visible.sync="showmore"
+  :modal-append-to-body="false"
+  width="30%"
+  center
+  :before-close="handleClose">
+  <fieldset style="border:1px solid #EBEEF5"">
+    <legend><b>基本信息</b></legend>
+	  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+		  <el-checkbox v-for="option in alloption" :label="option"></el-checkbox>
+	  </el-checkbox-group>
+  </fieldset>
+  <span slot="footer" class="dialog-footer">
+	  <el-button @click="showmore = false">取 消</el-button>
+	  <el-button type="primary" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-button>
+	  <el-button type="primary" @click="showmore = false">确 定</el-button>
+  </span>
+</el-dialog>
 		<el-dialog
 		  title="申请域名"
 		  :modal-append-to-body="false"
@@ -179,20 +245,6 @@
 			  <el-form-item label="购买证书">
 				<el-switch v-model="form.delivery"></el-switch>
 			  </el-form-item>
-			  <!--el-form-item label="活动性质">
-				<el-checkbox-group v-model="form.type">
-				  <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-				  <el-checkbox label="地推活动" name="type"></el-checkbox>
-				  <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-				  <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-				</el-checkbox-group>
-			  </el-form-item>
-			  <el-form-item label="特殊资源">
-				<el-radio-group v-model="form.resource">
-				  <el-radio label="线上品牌商赞助"></el-radio>
-				  <el-radio label="线下场地免费"></el-radio>
-				</el-radio-group>
-			  </el-form-item-->
 			  <el-form-item label="备注">
 				<el-input type="textarea" v-model="form.desc"></el-input>
 			  </el-form-item>
@@ -202,7 +254,13 @@
 			  </el-form-item>
 			</el-form>
 		</el-dialog>
-    </el-card>
+	</el-tab-pane>
+    <el-tab-pane label="已删除" name="second">
+
+	</el-tab-pane>
+  </el-tabs>
+
+  <!--  </el-card> -->
 </template>
 
 <script>
@@ -210,6 +268,11 @@ export default {
     name:"domain",
     data() {
         return {
+        	checkedCities: [],
+			alloption:['业务负责人','运维负责人','业务线','采购原因','备案主体','dnspod账号'],
+        	activeName:'first',
+			isIndeterminate: true,
+			showmore:false,
 			items:[
 			    {"up_name": "desktop.ini", "project_name": "37.com", "up_type": "down1", "l_tip": "", "up_out": "innet", "up_key": "", "up_md5": "9e36cc3537ee9ee1e3b10fa4e761045b", "rev_time": "美橙互联", "new_fname": "1559814902_desktop.ini", "appli_user": "2019-11-25", "log_state": 2, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "2013-11-25", "rev_user": "沪ICP备17030769号-5", "up_url": "", "id": 455, "up_eem": ""},
                 {"up_name": "201905302027_ahys_banshu1_1.0.16_999_2930.apk", "project_name": "37api.cn", "up_type": "down1", "l_tip": "", "up_out": "allnet", "up_key": "", "up_md5": "5cd0f2b2166d40af614f7ba0dbe96b68", "rev_time": "美橙互联", "new_fname": "1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.apk", "appli_user": "yuzhengxiong", "log_state": 0, "appli_time": "三七互娱（上海）科技有限公司", "l_titie": "\u6697\u9ed1\u52c7\u58eb\u7248\u7f72\u53050530-2", "rev_user": "沪ICP备17030769号-5", "up_url": "https://download.01234.com.cn:8003/1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.html", "id": 449, "up_eem": "https://download.01234.com.cn:8003/1559222112_201905302027_ahys_banshu1_1.0.16_999_2930.html"},
@@ -249,204 +312,18 @@ export default {
 			  resource: '',
 			  desc: ''
 			},
-        options: [{
-          value: 'zhinan',
-          label: '37游戏',
-          children: [{
-            value: 'shejiyuanze',
-            label: '设计原则',
-            children: [{
-              value: 'yizhi',
-              label: '一致'
-            }, {
-              value: 'fankui',
-              label: '反馈'
-            }, {
-              value: 'xiaolv',
-              label: '效率'
-            }, {
-              value: 'kekong',
-              label: '可控'
-            }]
-          }, {
-            value: 'daohang',
-            label: '极光游戏',
-            children: [{
-              value: 'cexiangdaohang',
-              label: '侧向导航'
-            }, {
-              value: 'dingbudaohang',
-              label: '顶部导航'
-            }]
-          }]
-        }, {
-          value: 'zujian',
-          label: '组件',
-          children: [{
-            value: 'basic',
-            label: 'Basic',
-            children: [{
-              value: 'layout',
-              label: 'Layout 布局'
-            }, {
-              value: 'color',
-              label: 'Color 色彩'
-            }, {
-              value: 'typography',
-              label: 'Typography 字体'
-            }, {
-              value: 'icon',
-              label: 'Icon 图标'
-            }, {
-              value: 'button',
-              label: 'Button 按钮'
-            }]
-          }, {
-            value: 'form',
-            label: 'Form',
-            children: [{
-              value: 'radio',
-              label: 'Radio 单选框'
-            }, {
-              value: 'checkbox',
-              label: 'Checkbox 多选框'
-            }, {
-              value: 'input',
-              label: 'Input 输入框'
-            }, {
-              value: 'input-number',
-              label: 'InputNumber 计数器'
-            }, {
-              value: 'select',
-              label: 'Select 选择器'
-            }, {
-              value: 'cascader',
-              label: 'Cascader 级联选择器'
-            }, {
-              value: 'switch',
-              label: 'Switch 开关'
-            }, {
-              value: 'slider',
-              label: 'Slider 滑块'
-            }, {
-              value: 'time-picker',
-              label: 'TimePicker 时间选择器'
-            }, {
-              value: 'date-picker',
-              label: 'DatePicker 日期选择器'
-            }, {
-              value: 'datetime-picker',
-              label: 'DateTimePicker 日期时间选择器'
-            }, {
-              value: 'upload',
-              label: 'Upload 上传'
-            }, {
-              value: 'rate',
-              label: 'Rate 评分'
-            }, {
-              value: 'form',
-              label: 'Form 表单'
-            }]
-          }, {
-            value: 'data',
-            label: 'Data',
-            children: [{
-              value: 'table',
-              label: 'Table 表格'
-            }, {
-              value: 'tag',
-              label: 'Tag 标签'
-            }, {
-              value: 'progress',
-              label: 'Progress 进度条'
-            }, {
-              value: 'tree',
-              label: 'Tree 树形控件'
-            }, {
-              value: 'pagination',
-              label: 'Pagination 分页'
-            }, {
-              value: 'badge',
-              label: 'Badge 标记'
-            }]
-          }, {
-            value: 'notice',
-            label: 'Notice',
-            children: [{
-              value: 'alert',
-              label: 'Alert 警告'
-            }, {
-              value: 'loading',
-              label: 'Loading 加载'
-            }, {
-              value: 'message',
-              label: 'Message 消息提示'
-            }, {
-              value: 'message-box',
-              label: 'MessageBox 弹框'
-            }, {
-              value: 'notification',
-              label: 'Notification 通知'
-            }]
-          }, {
-            value: 'navigation',
-            label: 'Navigation',
-            children: [{
-              value: 'menu',
-              label: 'NavMenu 导航菜单'
-            }, {
-              value: 'tabs',
-              label: 'Tabs 标签页'
-            }, {
-              value: 'breadcrumb',
-              label: 'Breadcrumb 面包屑'
-            }, {
-              value: 'dropdown',
-              label: 'Dropdown 下拉菜单'
-            }, {
-              value: 'steps',
-              label: 'Steps 步骤条'
-            }]
-          }, {
-            value: 'others',
-            label: 'Others',
-            children: [{
-              value: 'dialog',
-              label: 'Dialog 对话框'
-            }, {
-              value: 'tooltip',
-              label: 'Tooltip 文字提示'
-            }, {
-              value: 'popover',
-              label: 'Popover 弹出框'
-            }, {
-              value: 'card',
-              label: 'Card 卡片'
-            }, {
-              value: 'carousel',
-              label: 'Carousel 走马灯'
-            }, {
-              value: 'collapse',
-              label: 'Collapse 折叠面板'
-            }]
-          }]
-        }, {
-          value: 'ziyuan',
-          label: '资源',
-          children: [{
-            value: 'axure',
-            label: 'Axure Components'
-          }, {
-            value: 'sketch',
-            label: 'Sketch Templates'
-          }, {
-            value: 'jiaohu',
-            label: '组件交互文档'
-          }]
-        }]
         };
     },
 	methods:{
+      handleCheckAllChange(val) {
+        this.checkedCities = val ? cityOptions : [];
+        this.isIndeterminate = false;
+      },
+      handleCheckedCitiesChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.cities.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      },
     	ondel(){
 			this.$confirm('此操作将会一并注销【域名主体】, 是否继续?', '提示', {
 			  confirmButtonText: '确定',
