@@ -26,7 +26,7 @@ export default new Router({
       },
       {
           path:'/',
-          redirect:'/dashboard',
+          redirect:'/login',
       },
       {
         path: '/',
@@ -37,10 +37,10 @@ export default new Router({
             {path:'/table',component:ttable},
             {path:'/form',component:tform},
             {
-                path:'/domain/:action',component:domain,
+                path:'/domain',component:domain,
                 children: [
-                    {path:'',component:domain}
-                    {path:'order',component:dorderd}
+                    {path:'',component:domain},
+                    {path:'order',component:dorder}
                 ]
             },
             {path:'/dorderd/',component:dorderd},

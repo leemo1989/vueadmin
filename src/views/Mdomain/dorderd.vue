@@ -9,28 +9,39 @@
 			<el-step title="步骤 2-采购"></el-step>
 			<el-step title="步骤 3-购买"></el-step>
 		</el-steps>
-		<div style="clear:both"></div>
 		<div style="margin-top:50px">
 			<div v-if="active == 0" style="width: 500px;margin: 0 auto">
 				<el-form ref="form" :model="form" label-width="200px" size="mini" style="margin:0 auto">
-  <el-form-item label="区域">
-    <el-radio-group v-model="form.region">
-      <el-radio-button label="国内" ></el-radio-button>
-      <el-radio-button label="海外"></el-radio-button>
-    </el-radio-group>
-  </el-form-item>
-
-				  <el-form-item label="业务线">
-					<el-select v-model="form.region1" placeholder="请选择注册公司">
-					  <el-option label="37游戏" value="shanghai"></el-option>
-					  <el-option label="37游戏手游" value="beijing"></el-option>
-						<el-option label="37手游" value="beijing"></el-option>
-						<el-option label="极光网络" value="beijing"></el-option>
+					<el-form-item label="区域">
+						<el-radio-group v-model="form.region">
+							<el-radio-button label="国内" ></el-radio-button>
+							<el-radio-button label="海外"></el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="业务线">
+						<el-select v-model="form.ywline" placeholder="请选择业务线" @change="ywchange">
+							<el-option v-for="(v,k) in ywoptions" :label="k" :value="k"></el-option>
+						</el-select>
+					</el-form-item>
+				  <el-form-item label="备案主体" v-if="form.region == '国内'">
+					<el-select v-model="form.beian_main" placeholder="请选择备案主体">
+						<el-option v-for="v in beian_options" :label="v" :value="v" :key="v"></el-option>
 					</el-select>
 				  </el-form-item>
-  <el-form-item label="业务用途">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
+				  <el-form-item label="业务用途">
+					  <el-select
+						v-model="form.yw_use"
+						filterable
+						allow-create
+						default-first-option
+						placeholder="请选择文章标签">
+						<el-option
+						  v-for="v in yw_use_options"
+						  :label="v"
+						  :value="v">
+						</el-option>
+					  </el-select>
+				  </el-form-item>
 				  <el-form-item label="是否指定域名">
 					<el-radio-group v-model="form.isassigndomain">
 					  <el-radio-button label="是" ></el-radio-button>
@@ -38,34 +49,28 @@
 					</el-radio-group>
 				  </el-form-item>
 				  <el-form-item label="域名" v-if="form.isassigndomain == '是'">
-					<el-input v-model="form.name"></el-input>
+					<el-input v-model="form.name" placeholder="多个域名以逗号分隔"></el-input>
 				  </el-form-item>
 				  <el-form-item label="数量" v-if="form.isassigndomain == '否'">
 					<el-input v-model="form.name" type="number"></el-input>
 				  </el-form-item>
 				  <el-form-item label="是否备案" v-if="form.region == '国内'">
-					<el-radio-group v-model="form.region">
+					<el-radio-group v-model="form.is_reg">
 					  <el-radio-button label="是" ></el-radio-button>
 					  <el-radio-button label="否"></el-radio-button>
 					</el-radio-group>
 				  </el-form-item>
-				  <el-form-item label="备案主体" v-if="form.region == '国内'">
-					<el-select v-model="form.region" placeholder="请选择注册公司">
-					  <el-option label="易名中国" value="shanghai"></el-option>
-					  <el-option label="美橙互联" value="beijing"></el-option>
-					</el-select>
-				  </el-form-item>
+
 				  <el-form-item label="dns账号">
-					<el-select v-model="form.region" placeholder="请选择注册公司">
-					  <el-option label="易名中国" value="shanghai"></el-option>
-					  <el-option label="美橙互联" value="beijing"></el-option>
+					<el-select v-model="form.dns_account" placeholder="请选择dns账号">
+					  <el-option label="account@163.com" value="account@163.com"></el-option>
+					  <el-option label="wanglei2@37.com" value="beijing"></el-option>
 					</el-select>
 				  </el-form-item>
 				  <el-form-item label="dns套餐">
-					<el-select v-model="form.region" placeholder="请选择注册公司">
-					  <el-option label="易名中国" value="shanghai"></el-option>
-					  <el-option label="美橙互联" value="beijing"></el-option>
-					</el-select>
+					<el-radio-group v-model="form.dns_type">
+					  <el-radio-button label="DNS免费套餐" ></el-radio-button>
+					</el-radio-group>
 				  </el-form-item>
   <el-form-item label="业务负责人">
     <el-input v-model="form.name"></el-input>
@@ -186,26 +191,38 @@
 export default {
     name:"dorderd",
     data() {
-        return {
-          tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }],
-        	active: 0,
+        return {ywoptions:{'37游戏':['明日花1号','明日花2号'],'37游戏手游':['张良1号','张良2号','张良3号'],'37手游':['妲己2号','妲己22号'],'极光网络':['盖伦']},
+			beian_options:[],
+			yw_use_options:['用来XX','用来搞事情','ceshi'],
+			tableData: [{
+			date: '2016-05-02',
+			name: '王小虎',
+			address: '上海市普陀区金沙江路 1518 弄'
+			}],
+			active: 0,
 			form: {
-			  name: '',
-				region1:'极光网络',
-			  region: '国内',
-			  recom: '易名中国',
-			  Supplier:'易名中国',
-			  type: [],
-			  isassigndomain: '否',
-			  desc: ''
+				ywline:'',
+				dns_account:'',
+				dns_type:'DNS免费套餐',
+				ywuse:'',
+				is_reg:'是',
+				region: '国内',
+				beian_main:'',
+				recom: '易名中国',
+				Supplier:'易名中国',
+				type: [],
+				isassigndomain: '否',
+				desc: ''
 			},
         };
     },
     methods: {
+		// 当业务线下拉变化时，触发
+		ywchange(){
+			console.log(this.form.ywline,777,this.ywoptions[this.form.ywline])
+			this.form.beian_main = ''
+			this.beian_options = this.ywoptions[this.form.ywline]
+		},
 		next() {
 			if (this.active++ > 2) this.active = 0;
 		},

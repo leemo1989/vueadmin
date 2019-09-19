@@ -30,7 +30,7 @@ export default {
     },
     methods:{
         lg(){
-            this.$router.push('/')
+            this.$router.push('/dashboard')
         }
     }
 }

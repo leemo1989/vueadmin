@@ -23,7 +23,7 @@
                           <div>
                             <h3>监控系统</h3>
                             <el-divider></el-divider>
-                            <p><el-link icon="el-icon-share">资产管理平台</el-link></p>
+                            <p><el-link icon="el-icon-share">CMDB</el-link></p>
                           </div>
                           <div>
                             <h3>数据库</h3>
