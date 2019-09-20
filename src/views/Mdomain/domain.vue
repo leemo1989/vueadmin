@@ -1,16 +1,7 @@
 <template>
-    <!--el-card v-loading="loading"
-		element-loading-text="正在购买中"
-			 element-loading-background="rgba(0, 0, 0, 0.8)"
-			 element-loading-spinner="el-icon-loading"
-	-->
-
   <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
     <el-tab-pane label="使用中" name="first">
-		<!--内容-->
-        <!--el-button type="primary" @click="handlebuy">申请域名</el-button-->
-
-		<el-button type="danger" @click="ondel">批量删除</el-button>
+		<!--el-button type="danger" @click="ondel">批量删除</el-button-->
 		<el-button type="primary">导出</el-button>
         <el-button type="primary" style="float:right" @click="showmore = true">显示框</el-button>
         <br><br>

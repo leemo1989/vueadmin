@@ -30,7 +30,7 @@ export default {
     },
     methods:{
         lg(){
-            this.$router.push('/dashboard')
+            this.$router.push('/cmdb')
         }
     }
 }

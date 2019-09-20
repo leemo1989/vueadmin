@@ -4,7 +4,6 @@
   </div>
 </template>
 <script>
-
 export default {
   name: 'app',
 }
@@ -29,6 +28,5 @@ html,body{
     display: flex;
     flex-direction: column;
     overflow: hidden;
-
 }
 </style>

@@ -1,75 +1,9 @@
 <template>
-    <div>
-        <header>
-            <el-col :span="2" style="width:245px">
-                <h1 style="padding-left:15px"><font color="red"><font size="6">37AI</font></font> 运维平台</h1>
-            </el-col>
-            <el-col :span="4" style="display: flex;align-items: center">
-                <div class="sline"></div>
-                <el-button :icon="t?'el-icon-s-grid':'el-icon-menu'" @click="toggleshow" style="border: none"></el-button>
-                <h3 style="margin-left:20px">总览</h3>
-                <el-dropdown style="margin:0 20px" placement="top-start">
-                  <span class="el-dropdown-link">
-                    <b>应用管理</b><i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                        <div style="width: 500px;height: 300px;display: flex;justify-content: space-around">
-                          <div>
-                            <h3>自动化</h3>
-                            <el-divider></el-divider>
-                            <p><el-link icon="el-icon-s-promotion">作业平台</el-link></p>
-                              <p><el-link icon="el-icon-edit">配置管理</el-link></p>
-                          </div>
-                          <div>
-                            <h3>监控系统</h3>
-                            <el-divider></el-divider>
-                            <p><el-link icon="el-icon-share">CMDB</el-link></p>
-                          </div>
-                          <div>
-                            <h3>数据库</h3>
-                            <el-divider></el-divider>
-                            <p><el-link icon="el-icon-s-data">资产管理平台</el-link></p>
-                          </div>
-                        </div>
-                  </el-dropdown-menu>
-                </el-dropdown>
-            </el-col>
-            <el-col :span="16">
-                <div class="sline"></div>
-            </el-col>
-            <el-col :span="1" style="display: flex;align-items: center">
-                <el-badge :value="unreadnum" v-show="unreadnum >0">
-                    <el-button icon="fa fa-envelope-o fa-2x" size="small" style="border: none" @click="catmessage"></el-button>
-                </el-badge>
-                <div class="sline"></div>
-            </el-col>
-            <el-col :span="2" style="display: flex;align-items: center">
-                <el-avatar src="https://img2.woyaogexing.com/2019/08/09/7db9a484d93843f685a3c2b583580b97!400x400.jpeg"></el-avatar>
-                <el-dropdown style="margin:0 20px">
-                  <span class="el-dropdown-link">
-                    <b>王磊</b><i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>个人信息</el-dropdown-item>
-                      <el-dropdown-item><router-link to="/login">退出</router-link></el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-                <div class="sline"></div>
-            </el-col>
-            <el-col :span="1">
-                <el-button icon="el-icon-s-unfold" @click="drawer = true" style="border: 0"></el-button>
-                <el-drawer
-                  title="我是标题"
-                  :visible.sync="drawer"
-                  :before-close="handleClose">
-                  <span>我来啦!</span>
-                </el-drawer>
-            </el-col>
-        </header>
         <div class="container">
             <div class="easide" :class="{showleftnav:!t,hideleftnav:t}">
+                <div style="padding-left:20px;text-shadow:2px 2px 5px #333333;"><h1>域名管理</h1></div>
                 <el-menu :router="true" :collapse="t" :collapse-transition="false">
-                    <el-menu-item index="/dashboard">
+                    <!--el-menu-item index="/dashboard">
                         <i class="el-icon-upload"></i>
                         <span>总览</span>
                     </el-menu-item>
@@ -93,30 +27,14 @@
                             <el-menu-item index="/taskwork">编辑作业</el-menu-item>
                             <el-menu-item index="/yewu">查看作业</el-menu-item>
                         </el-menu-item-group>
-                    </el-submenu>
-                    <el-menu-item index="/table">
-                        <i class="el-icon-s-grid"></i>
-                        <span>Tab</span>
-                    </el-menu-item>
-                    <el-menu-item index="/dorder">
-                        <i class="el-icon-upload"></i>
+                    </el-submenu-->
+                    <el-menu-item index="/domain/dorder">
+                        <i class="el-icon-set-up"></i>
                         <span>域名工单</span>
                     </el-menu-item>
                     <el-menu-item index="/domain">
                         <i class="el-icon-upload"></i>
                         <span>域名管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                        <i class="el-icon-upload"></i>
-                        <span>中间件监控</span>
-                    </el-menu-item>
-                    <el-menu-item index="3">
-                        <i class="el-icon-phone"></i>
-                        <span>告警模板</span>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                        <i class="el-icon-upload"></i>
-                        <span>故障自愈</span>
                     </el-menu-item>
                     <el-menu-item index="4">
                         <i class="el-icon-setting"></i>
@@ -128,7 +46,6 @@
                 <router-view></router-view>
             </div>
         </div>
-    </div>
 </template>
 <script>
 export default {
